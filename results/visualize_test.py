@@ -3,10 +3,22 @@ from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
 
+ROOT_DIR = Path(__file__).resolve().parent.parent
+
 def main():
     parser = argparse.ArgumentParser(description="Visualize test restorations side-by-side.")
-    parser.add_argument("--degraded_dir", type=Path, default="data/test_degraded")
-    parser.add_argument("--restored_dir", type=Path, default="output_visualizations")
+    parser.add_argument(
+    "--degraded_dir",
+    type=Path,
+    required=True,
+    help="Directory containing degraded .npy images.",
+    )
+    parser.add_argument(
+        "--restored_dir",
+        type=Path,
+        required=True,
+        help="Directory containing restored .npy images.",
+    )
     parser.add_argument("--num_images", type=int, default=5, help="Number of images to visualize")
     args = parser.parse_args()
 
@@ -41,7 +53,10 @@ def main():
         plt.tight_layout()
         
         # Save the visualization
-        out_name = args.restored_dir / f"test_viz_{i:04d}.png"
+        viz_dir = ROOT_DIR / "results" / "visualizations"
+        viz_dir.mkdir(parents=True, exist_ok=True)
+
+        out_name = viz_dir / f"test_viz_{i:04d}.png"
         fig.savefig(out_name, dpi=150, bbox_inches="tight")
         plt.close(fig)
         

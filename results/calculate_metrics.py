@@ -14,46 +14,57 @@ except ImportError as error:
         "`python -m pip install -r requirements.txt`."
     ) from error
 
+import sys
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT_DIR))
+
 from dataset import KLARestorationDataset
-from KLA.inference import select_device
+from inference import select_device
 from model import NAFNetDWT
 
 
 def parse_args() -> argparse.Namespace:
-    script_dir = Path(__file__).resolve().parent
-    parser = argparse.ArgumentParser(description="Evaluate NAFNetDWT on held-out validation pairs.")
+    parser = argparse.ArgumentParser(
+        description="Evaluate NAFNetDWT on held-out validation pairs."
+    )
+
     parser.add_argument(
         "--degraded_dir",
         type=Path,
-        default=script_dir / "data" / "val_degraded",
+        default=ROOT_DIR / "data" / "val_degraded",
         help="Validation degraded-image directory.",
     )
+
     parser.add_argument(
         "--gt_dir",
         type=Path,
-        default=script_dir / "data" / "val_gt",
+        default=ROOT_DIR / "data" / "val_gt",
         help="Validation ground-truth directory.",
     )
+
     parser.add_argument(
         "--checkpoint",
         type=Path,
-        default=script_dir / "checkpoints" / "kla_model.pth",
+        default=ROOT_DIR / "weights" / "kla_model_final.pth",
         help="Model checkpoint path.",
     )
+
     parser.add_argument(
         "--output_json",
         type=Path,
-        default=script_dir / "validation_metrics.json",
+        default=ROOT_DIR / "results" / "validation_metrics.json",
         help="Path for the machine-readable metric report.",
     )
+
     parser.add_argument(
         "--device",
         choices=("auto", "cuda", "mps", "cpu"),
         default="auto",
         help="Evaluation device (default: auto).",
     )
-    return parser.parse_args()
 
+    return parser.parse_args()
 
 def main() -> None:
     args = parse_args()

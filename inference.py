@@ -33,7 +33,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--checkpoint",
         type=Path,
-        default=script_dir / "checkpoints" / "kla_model_final.pth",
+        default=script_dir / "weights" / "kla_model_final.pth",
         help="Model checkpoint path (default: %(default)s).",
     )
     parser.add_argument(

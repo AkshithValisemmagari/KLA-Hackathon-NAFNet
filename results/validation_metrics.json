@@ -1,5 +1,5 @@
 {
-  "checkpoint": "/Users/akshithvalisemmagari/Downloads/KLA Hackathon NAFNet/KLA/checkpoints/kla_model_final.pth",
+  "checkpoint": "/Users/akshithvalisemmagari/Downloads/KLA Hackathon NAFNet/KLA/weights/kla_model_final.pth",
   "device": "mps",
   "image_count": 400,
   "psnr_db_mean": 28.677721148966512,
