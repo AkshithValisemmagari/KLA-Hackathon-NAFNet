@@ -456,7 +456,7 @@ def train() -> None:
     print(f"Training on: {device}")
     print(f"Training pairs: {len(train_dataset)} | Validation pairs: {len(val_dataset)}")
     print(f"Parameters: {sum(parameter.numel() for parameter in model.parameters()):,}")
-    print(f"EMA Tracking: ENABLED | MS-SSIM: ENABLED | FFT Loss: ENABLED[cite: 9, 10]")
+    print(f"EMA Tracking: ENABLED | MS-SSIM: ENABLED | FFT Loss: ENABLED")
     print(f"Best checkpoint: {best_checkpoint}")
 
     initial_metrics, best_val_psnr = evaluate_validation(ema_model, val_loader, criterion, device)

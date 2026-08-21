@@ -19,21 +19,19 @@ def parse_args() -> argparse.Namespace:
         description="High-performance batched inference for NAFNetDWT."
     )
     parser.add_argument(
-        "--input_dir",
+        "input_dir",
         type=Path,
-        required=True,
         help="Directory containing degraded .npy images.",
     )
     parser.add_argument(
-        "--output_dir",
+        "output_dir",
         type=Path,
-        required=True,
         help="Directory where restored .npy images will be written.",
     )
     parser.add_argument(
         "--checkpoint",
         type=Path,
-        default=script_dir / "weights" / "kla_model_final.pth",
+        default=script_dir / "models" / "kla_model_final.pth",
         help="Model checkpoint path (default: %(default)s).",
     )
     parser.add_argument(
@@ -45,14 +43,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--batch_size",
         type=int,
-        default=4,
+        default=16,
         help="Inference batch size per shape bucket.",
     )
     parser.add_argument(
         "--num_workers",
         type=int,
         default=4,
-        help="Number of background CPU threads for loading disk data.",
+        help="Number of worker processes for loading input data.",
     )
     parser.add_argument(
         "--no_compile",
@@ -283,8 +281,20 @@ def restore_images(
             outputs = restored.float().cpu().numpy()
             
             for i in range(len(filenames)):
-                out_array = outputs[i].squeeze()
-                out_array = np.clip(out_array, 0.0, 1.0).astype(np.float32, copy=False)
+                out_array = outputs[i, 0]
+
+                out_array = np.nan_to_num(
+                    out_array,
+                    nan=0.0,
+                    posinf=1.0,
+                    neginf=0.0,
+                )
+                out_array = np.clip(
+                    out_array,
+                    0.0,
+                    1.0,
+                ).astype(np.float32, copy=False)
+                
                 write_queue.put((out_array, filenames[i]))
 
     # Shutdown background writer thread and check for failures

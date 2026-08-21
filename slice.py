@@ -18,7 +18,7 @@ def parse_args() -> argparse.Namespace:
         "--val_gt", type=Path, default=Path("val_gt"), help="Path to output validation ground truth images."
     )
     parser.add_argument(
-        "--num_val", type=int, default=200, help="Number of image pairs to move to the validation set (default: 200)."
+        "--num_val", type=int, default=400, help="Number of image pairs to move to the validation set (default: 400)."
     )
     parser.add_argument(
         "--seed", type=int, default=42, help="Random seed for reproducibility."

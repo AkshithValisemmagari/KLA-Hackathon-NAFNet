@@ -11,15 +11,10 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
-import argparse
-import torch
-import lpips
-from pytorch_msssim import ms_ssim
-from tqdm import tqdm
 
 from dataset import KLARestorationDataset
 from torch.utils.data import DataLoader
-from inference import select_device
+from run import select_device
 from model import NAFNetDWT
 
 def parse_args() -> argparse.Namespace:
